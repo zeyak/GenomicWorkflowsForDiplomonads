@@ -1,0 +1,18 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python>=3.9
+  - masurca
+  - flye
+  - pilon
+  - quast
+  - fastqc
+  - multiqc
+  - trimmomatic
+  - deeptools
+  - bowtie2=2.4.5
+  - winnowmap
+  - samtools=1.12
+  - cd-hit
+  - trnascan-se
