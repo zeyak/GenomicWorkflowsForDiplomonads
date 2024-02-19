@@ -1,5 +1,5 @@
 # GenoDiplo: Advanced Genomics and Comparative Genomics Analysis Pipelines for Diplomonads
-![GenoDiplo Logo](logo.png "GenoDiplo Logo")
+![GenoDiplo Logo](images/logo.png "GenoDiplo Logo")
 
 ## Overview
 GenoDiplo offers an integrated workflow for the assembly and annotation of diplomonad genomes, leveraging hybrid sequencing technologies. This repository encompasses tools and protocols for preprocessing, assembly, structural and functional annotation, and comparative genomics analysis.
