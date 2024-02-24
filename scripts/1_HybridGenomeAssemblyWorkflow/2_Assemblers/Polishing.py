@@ -8,7 +8,7 @@ illumina_run2_R2 = snakemake.illumina_run2_R2
 illumina_run3_R1 = snakemake.input.illumina_run3_R1
 illumina_run3_R2 = snakemake.illumina_run3_R2
 
-polished_assembly = snakemake.ouptut.polished_assembly
+polished_assembly = snakemake.output.polished_assembly
 
 shell(f"""polca.sh -a {assembly} -r \
 '{illumina_run1_R1} {illumina_run1_R2}

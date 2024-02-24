@@ -13,7 +13,7 @@ try:
 except NameError:
     # testing
     path = "output/interproscan/raw_data/*.tsv"
-    out_file = "output/interproscan/processed_data/"
+    out_file = "output/interproscan/processed_data/ann_ipr_cat.csv"
     list_files = glob.glob(path)
 
 
@@ -31,7 +31,8 @@ for key, value in sp_dic.items():
                                engine='python', quoting=3)[[0,3,4,5,11,12]]
     dic_ann[key] = dic_ann[key].dropna().drop_duplicates().rename(
         columns={0: "id", 3:"db", 4:"db_acc", 5:"ann_db", 11:"ipr", 12:"ann_inter"})
+    dic_ann[key]["sp"]= key
     dic_ann[key].to_csv(f"output/interproscan/processed_data/{key}.csv", sep="\t", index=False)
     
 
-pd.concat(dic_ann, axis=0).dropna().drop_duplicates().to_csv(out_file + "ann_ipr_cat.csv", sep="\t", index=False)
+pd.concat(dic_ann, axis=0).dropna().drop_duplicates().to_csv(out_file, sep="\t", index=False)
