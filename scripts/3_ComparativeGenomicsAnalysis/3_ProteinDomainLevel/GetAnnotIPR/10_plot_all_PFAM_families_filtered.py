@@ -54,15 +54,14 @@ def dict_count_pfam(df, sp) -> pd.DataFrame:
     @return: PFAM count table
     """
     df_ = df.groupby(["sp"]).get_group(sp)
-    df_ = df_[df_["ann_inter"].str.contains("superfamily", case=False)]
     df_ = df_[df_["db"].str.contains("Pfam", case=False)]
-    count = df_.groupby(["db_acc", ""]).size().reset_index().sort_values(by=[0], ascending=False)
+    count = df_.groupby(["db_acc", "family"]).size().reset_index().sort_values(by=[0], ascending=False)
     return count.rename(columns={0: sp}), df_
 
 def filter(df, filter):
     return df[df.apply(lambda c: (c[1:] > filter).any(), axis=1)].sort_values(by="family", ascending=False)
 
-# make a function that filters teh top 5 pfam fro each family
+# make a function that filters teh top 5 pfam for each family
 def filter_top5(df, filter):
     return df.groupby("family").head(filter).sort_values(by=["HIN", "family"], ascending=False)
 
