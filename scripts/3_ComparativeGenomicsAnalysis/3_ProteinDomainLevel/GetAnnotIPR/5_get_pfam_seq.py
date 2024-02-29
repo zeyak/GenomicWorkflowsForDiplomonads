@@ -14,7 +14,7 @@ except NameError:
     protein_fasta= f"""output/interproscan/processed_data/{pfam}.faa"""
 
 #get hit ids from blastn
-id = pd.read_csv(gene_id_list, header=None, sep='\t')[0]#.tolist()
+id = pd.read_csv(gene_id_list, header=None, sep='\t')[0]
 print("id", len(id))
 id_list= id.drop_duplicates().tolist()
 
