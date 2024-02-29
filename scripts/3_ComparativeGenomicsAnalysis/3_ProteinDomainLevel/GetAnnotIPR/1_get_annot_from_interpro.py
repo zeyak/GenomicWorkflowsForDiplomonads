@@ -4,6 +4,7 @@ import glob
 """
 This script;
 Filters each interproscan output from diff species
+Renames the columns
 Concatanates all the outputs
 """
 
@@ -35,4 +36,5 @@ for key, value in sp_dic.items():
     dic_ann[key].to_csv(f"output/interproscan/processed_data/{key}.csv", sep="\t", index=False)
     
 
-pd.concat(dic_ann, axis=0).dropna().drop_duplicates().to_csv(out_file, sep="\t", index=False)
+ann_ipr_cat= pd.concat(dic_ann, axis=0).dropna().drop_duplicates()
+ann_ipr_cat.to_csv(out_file, sep="\t", index=False)

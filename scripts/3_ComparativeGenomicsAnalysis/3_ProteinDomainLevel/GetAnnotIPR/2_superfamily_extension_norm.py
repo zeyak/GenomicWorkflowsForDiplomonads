@@ -1,8 +1,13 @@
 import pandas as pd
-import glob
 import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
+
+"""
+This script;
+Normalizes the superfamily expansion according to the genome size
+Makes a heatmap of the top 7 superfamily
+"""
 
 try:
     og_file = snakemake.input.og
@@ -11,11 +16,9 @@ except NameError:
     # testing
     ann_ipr_file = "output/interproscan/processed_data/ann_ipr_cat.csv"
 
-    out_file1 = "output/interproscan/plot/superfamily_heatmap.png"
-    out_file2 = "output/interproscan/plot/superfamily_heatmap_norm.png"
-    out_file3 = "output/interproscan/processed_data/ann_ipr_cat_top7sf.csv"
+    out_file1 = "output/interproscan/plot/superfamily_heatmap_norm.png"
 
-def plot_heatmap(df, out_file):
+def plot_heatmap_norm(df, out_file):
     df = df.rename(columns={"carpe": "C. membranifera",
                             "kbiala": "K. bialata",
                             "HIN": "H. inflata",
@@ -85,13 +88,15 @@ def normalization(df):
     # trepo doesn't have a genome size
     return df_c
 
-species = ['HIN', 'spiro', 'wb', 'muris', 'carpe', 'kbiala'] #trepo is excluded
+species = ['HIN','spiro', 'wb', 'muris', 'carpe', 'kbiala'] #trepo is excluded
 
 df = pd.read_csv(ann_ipr_file, header="infer", sep="\t")
 df = df.dropna(subset="ipr").drop_duplicates(subset=["id", "ipr"])
 count, df_ipr, df_7ipr = dict_count_ipr(df, "HIN")
 
 for sp in species:
+    if sp == "trepo":
+        continue
     count = pd.merge(count, dict_count_ipr(df, sp)[0], how="outer")
     df_ipr = pd.merge(df_ipr, dict_count_ipr(df, sp)[1], how="outer")
 
@@ -102,7 +107,4 @@ df_7ipr = mark_top7_ipr(df_7ipr) # mark families in top 7 ipr
 print(df_7ipr)
 df_ipr_marked = pd.merge(df_7ipr, df_ipr, how="inner") # merge top 7 ipr with original df
 
-
-plot_heatmap(counts[:7], out_file1) # top 7 superfamily
-plot_heatmap( counts_norm[:7], out_file2)
-df_ipr_marked.to_csv(out_file3, sep="\t", index=False)
+plot_heatmap_norm( counts_norm[:7], out_file1)
