@@ -7,7 +7,7 @@ rule all:
 
 rule tmhmm:
     input:
-        "output/interproscan/processed_data/{pfam}.faa"
+        protein ="output/interproscan/processed_data/{pfam}.faa"
     output:
         "output/tmhmm/{pfam}.txt"
     conda:
@@ -17,7 +17,7 @@ rule tmhmm:
 
 rule signalp:
     input:
-        "output/interproscan/processed_data/{pfam}.faa"
+        protein= "output/interproscan/processed_data/{pfam}.faa"
     output:
         "output/signalp/{pfam}.gff"
     conda:
