@@ -4,5 +4,5 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - dansondergaard::tmhmm.py
+  - dansondergaard::run_tmhmm.py
   - predector::signalp4
