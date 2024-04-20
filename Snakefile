@@ -15,9 +15,9 @@ rule tmhmm:
     output:
         "output/tmhmm/{pfam}.txt"
     conda:
-        "env/comparative_genomics.yaml"
+        "envs/comparative_genomics.yaml"
     script:
-        "scripts/comparative_genomics/3_ProteinDomainLevel/run_tmhmm.py"
+        "scripts/comparative_genomics/protein_domain_level/run_tmhmm.py"
 
 rule signalp:
     input:
@@ -25,9 +25,9 @@ rule signalp:
     output:
         "output/signalp/{pfam}.gff"
     conda:
-        "env/comparative_genomics.yaml"
+        "envs/comparative_genomics.yaml"
     script:
-        "scripts/comparative_genomics/3_ProteinDomainLevel/run_signalp.py"
+        "scripts/comparative_genomics/protein_domain_level/run_signalp.py"
 
 rule fastqc:
     input:
@@ -35,9 +35,9 @@ rule fastqc:
     output:
         "output/spiro/fastqc/{sample}.html"
     conda:
-        "env/hybrid_genome_assembly.yaml"
+        "envs/hybrid_genome_assembly.yaml"
     script:
-        "scripts/hybrid_genome_assembly/1_ReadsPreprocessing/check_read_quality.py"
+        "scripts/hybrid_genome_assembly/read_preprocessing/check_read_quality.py"
 
 rule multiqc:
     input:
@@ -45,9 +45,9 @@ rule multiqc:
     output:
         directory("output/spiro/multiqc/")
     conda:
-        "env/hybrid_genome_assembly.yaml"
+        "envs/hybrid_genome_assembly.yaml"
     script:
-        "scripts/hybrid_genome_assembly/1_ReadsPreprocessing/get_multiqc.py"
+        "scripts/hybrid_genome_assembly/read_preprocessing/get_multiqc.py"
 
 rule makeblastdb:
     input:
