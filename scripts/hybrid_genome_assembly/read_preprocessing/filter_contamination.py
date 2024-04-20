@@ -9,7 +9,7 @@
 """
 from snakemake.shell import shell
 
-putative_contamination= snakemake.input.putative_contamination
+putative_contamination = snakemake.input.putative_contamination
 contamination = snakemake.output.contamination
 
 shell(f"ContamintationFilter.py -i {putative_contamination} -o {contamination}")

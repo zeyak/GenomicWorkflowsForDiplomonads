@@ -1,6 +1,6 @@
 from snakemake.shell import shell
 
-diplomonad_proteome= snakemake.input.proteome
+diplomonad_proteome = snakemake.input.proteome
 
 db_prefix = snakemake.params.db_prefix
 outfmt = snakemake.params.outfmt

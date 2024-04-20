@@ -14,6 +14,7 @@ df = df.rename(columns={0: "OG"}).set_index("OG")
 df = df.stack().reset_index().drop(columns=["level_1"])
 df = df.rename(columns={0: "id"})
 
+
 def convert_name(name: str) -> str:
     """
     Convert names.
@@ -35,6 +36,7 @@ def convert_name(name: str) -> str:
     for key, value in pairs.items():
         if name.startswith(key):
             return value
+
 
 df['sp'] = df.id.apply(convert_name)
 

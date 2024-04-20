@@ -118,10 +118,3 @@ rule scatter_fasta:
         "envs/blast.yaml"
     script:
         "scripts/scatter_fasta.py"
-
-
-
-
-
-
-

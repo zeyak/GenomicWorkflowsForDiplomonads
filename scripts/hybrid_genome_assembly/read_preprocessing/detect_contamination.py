@@ -5,12 +5,12 @@ assembly = snakemake.input.assembly
 db_prefix_human = snakemake.params.db_prefix_human
 db_prefix_prok = snakemake.params.db_prefix_prok
 e_value = snakemake.params.e_value
-outfmt= snakemake.params.outfmt
+outfmt = snakemake.params.outfmt
 threads = snakemake.params.threads
 
 putative_contamination = snakemake.output.putative_contamination
 
-#Search contamination in human database
+# Search contamination in human database
 if human == True:
     shell(f"blastn \
      -query {assembly} \
@@ -20,7 +20,7 @@ if human == True:
      -outfmt {outfmt} \
      -num_threads {threads}")
 
-#Search contamination in refrence prokaryotes
+# Search contamination in refrence prokaryotes
 else:
     shell(f"blastn \
      -query {assembly} \

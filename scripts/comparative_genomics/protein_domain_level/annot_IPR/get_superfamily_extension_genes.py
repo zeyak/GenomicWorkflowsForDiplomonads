@@ -1,6 +1,6 @@
+import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 
 """
@@ -30,7 +30,7 @@ def plot_heatmap(df, out_file):
                             "wb": "G. intestinalis",
                             "muris": "G. muris"})
 
-    df = df[["C. membranifera", "K. bialata", "H. inflata", "Trepomonas pc1" ,"S. salmonicida", "G. intestinalis",
+    df = df[["C. membranifera", "K. bialata", "H. inflata", "Trepomonas pc1", "S. salmonicida", "G. intestinalis",
              "G. muris"]]
     custom_labels = ["LRR", "HB", "CP", "PK", "CRP", "WD40", "ankyrin"]
 
@@ -39,15 +39,15 @@ def plot_heatmap(df, out_file):
     f, ax = plt.subplots(figsize=(10, 10))
 
     heatmap = sns.heatmap(df.T,
-                     norm=LogNorm(),
-                     cmap=sns.color_palette("ch:start=.2,rot=-.3", as_cmap=True),
-                     square=True,
-                     fmt='g',
-                     linewidths=.4,
-                     annot=True,
-                     cbar_kws={"shrink": .5}
-                     )
-    #heatmap.set_title("top7_superfamily")
+                          norm=LogNorm(),
+                          cmap=sns.color_palette("ch:start=.2,rot=-.3", as_cmap=True),
+                          square=True,
+                          fmt='g',
+                          linewidths=.4,
+                          annot=True,
+                          cbar_kws={"shrink": .5}
+                          )
+    # heatmap.set_title("top7_superfamily")
     heatmap.set_xlabel('')  # Removes the x-axis title
 
     # Positioning custom labels above each column
@@ -57,6 +57,7 @@ def plot_heatmap(df, out_file):
     plt.savefig(out_file, format="png", bbox_inches='tight', dpi=1200)
     plt.show()
     return plt
+
 
 def dict_count_ipr(df, sp) -> pd.DataFrame:
     """
@@ -69,6 +70,7 @@ def dict_count_ipr(df, sp) -> pd.DataFrame:
     df_7 = count[["ipr", "ann_inter"]][:7]
     return count.rename(columns={0: sp}), df_, df_7
 
+
 def mark_top7_ipr(df):
     df["family"] = ""
     df["family"].iloc[0] = "LRR"
@@ -80,7 +82,8 @@ def mark_top7_ipr(df):
     df["family"].iloc[6] = "ankyrin"
     return df
 
-species = ['HIN','trepo','spiro', 'wb', 'muris', 'carpe', 'kbiala'] #trepo is excluded
+
+species = ['HIN', 'trepo', 'spiro', 'wb', 'muris', 'carpe', 'kbiala']  # trepo is excluded
 
 df = pd.read_csv(ann_ipr_file, header="infer", sep="\t")
 df = df.dropna(subset="ipr").drop_duplicates(subset=["id", "ipr"])
@@ -90,12 +93,10 @@ for sp in species:
     count = pd.merge(count, dict_count_ipr(df, sp)[0], how="outer")
     df_ipr = pd.merge(df_ipr, dict_count_ipr(df, sp)[1], how="outer")
 
-
-counts = count.set_index("ipr") # make count table
-df_7ipr = mark_top7_ipr(df_7ipr) # mark families in top 7 ipr
+counts = count.set_index("ipr")  # make count table
+df_7ipr = mark_top7_ipr(df_7ipr)  # mark families in top 7 ipr
 print(df_7ipr)
-df_ipr_marked = pd.merge(df_7ipr, df_ipr, how="inner") # merge top 7 ipr with original df
+df_ipr_marked = pd.merge(df_7ipr, df_ipr, how="inner")  # merge top 7 ipr with original df
 
-
-plot_heatmap(counts[:7], out_file1) # top 7 superfamily
+plot_heatmap(counts[:7], out_file1)  # top 7 superfamily
 df_ipr_marked.to_csv(out_file2, sep="\t", index=False)

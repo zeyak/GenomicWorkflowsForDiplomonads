@@ -2,7 +2,7 @@ from snakemake.shell import shell
 
 pacbio = snakemake.input.pacbio
 nanopore = snakemake.input.nanopore
-run1_R2 = snakemake.input.run1_R2 #take as single reads
+run1_R2 = snakemake.input.run1_R2  # take as single reads
 run2 = snakemake.input.run2
 run3 = snakemake.input.run3
 

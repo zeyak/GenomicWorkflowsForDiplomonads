@@ -1,7 +1,7 @@
 import pandas as pd
 from Bio import SeqIO
 
-pfam= "PF12799"
+pfam = "PF12799"
 try:
     pfam = snakemake.wildcards.pfam
     gene_id_list = snakemake.input[0]
@@ -11,14 +11,14 @@ except NameError:
     # testing
     gene_id_list = f"""output/interproscan/processed_data/{pfam}_geneid.csv"""
     proteome_fasta = "resources/Genome/HIN.faa"
-    protein_fasta= f"""output/interproscan/processed_data/{pfam}.faa"""
+    protein_fasta = f"""output/interproscan/processed_data/{pfam}.faa"""
 
-#get hit ids from blastn
+# get hit ids from blastn
 id = pd.read_csv(gene_id_list, header=None, sep='\t')[0]
 print("id", len(id))
-id_list= id.drop_duplicates().tolist()
+id_list = id.drop_duplicates().tolist()
 
-#extract fasta file for missing transcripts
+# extract fasta file for missing transcripts
 with open(proteome_fasta, "r") as fasta_in:
     with open(protein_fasta, "w") as fasta_out:
         for record in SeqIO.parse(fasta_in, "fasta"):

@@ -1,4 +1,5 @@
 import os
+
 import pandas as pd
 from Bio import SeqIO
 
@@ -50,4 +51,3 @@ if current_batch_records:
     output_filename = f"{output_dir}/batch_{batch_number}.fasta"
     with open(output_filename, "w") as output_fasta:
         SeqIO.write(current_batch_records, output_fasta, "fasta")
-

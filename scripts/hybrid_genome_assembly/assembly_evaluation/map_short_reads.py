@@ -1,5 +1,6 @@
-from snakemake.shell import shell
 import os
+
+from snakemake.shell import shell
 
 bam = snakemake.output.bam
 bai = snakemake.output.bai

@@ -1,7 +1,6 @@
-import pandas as pd
-import glob
-import seaborn as sns
 import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
 from matplotlib.colors import LogNorm
 
 try:
@@ -18,7 +17,7 @@ def plot_heatmap(df):
     df = df.rename(columns={"carpe": "C. membranifera",
                             "kbiala": "K. bialata",
                             "HIN": "H. inflata",
-                           # "trepo": "Trepomonas pc1",
+                            # "trepo": "Trepomonas pc1",
                             "spiro": "S. salmonicida",
                             "wb": "G. intestinalis",
                             "muris": "G. muris"})
@@ -67,11 +66,11 @@ def normalization(df):
     df["muris"] = (df["muris"] / 9.8).round(1)
     df["carpe"] = (df["carpe"] / 24.2).round(1)
     df["kbiala"] = (df["kbiala"] / 51).round(1)
-    #trepo doesnt have a genome size
+    # trepo doesnt have a genome size
     return df
 
 
-species = ['HIN', 'spiro', 'wb', 'muris', 'carpe', 'kbiala'] #trepo is excluded
+species = ['HIN', 'spiro', 'wb', 'muris', 'carpe', 'kbiala']  # trepo is excluded
 
 df = pd.read_csv(og_ann_file, header="infer", sep="\t")
 df = df.dropna(subset="ipr").drop_duplicates(subset=["id", "ipr"])
@@ -81,5 +80,5 @@ for sp in species:
     count = pd.merge(count, dict_count_ipr(df, sp), how="outer")
 
 counts = count.set_index("ann_inter")
-counts = filter(normalization(counts), 5 )[:7] #exclude teh last WD40
-plot_heatmap( counts )
+counts = filter(normalization(counts), 5)[:7]  # exclude teh last WD40
+plot_heatmap(counts)

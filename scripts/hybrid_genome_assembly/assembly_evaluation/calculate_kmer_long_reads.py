@@ -1,10 +1,10 @@
 from snakemake.shell import shell
 
-#input
+# input
 genome = snakemake.input.genome
 
-#output
-merylDB= snakemake.output.merylDB
+# output
+merylDB = snakemake.output.merylDB
 repetitive_k15 = snakemake.output.repetitive_k15
 
 shell(f"""meryl count k=15 output {merylDB} {genome}""")

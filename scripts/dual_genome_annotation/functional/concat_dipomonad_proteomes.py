@@ -1,7 +1,7 @@
 from snakemake.shell import shell
 
-muris= snakemake.input.muris
-wb= snakemake.input.wb
+muris = snakemake.input.muris
+wb = snakemake.input.wb
 spiro = snakemake.input.spiro
 
 diplomonad_proteomes = snakemake.output.diplomonad_proteomes

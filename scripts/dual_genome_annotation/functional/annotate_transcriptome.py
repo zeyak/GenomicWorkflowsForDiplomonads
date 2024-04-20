@@ -1,6 +1,6 @@
 from snakemake.shell import shell
 
-trepo_proteome= snakemake.input.trepo_proteome
+trepo_proteome = snakemake.input.trepo_proteome
 
 db_prefix = snakemake.params.db_prefix
 outfmt = snakemake.params.outfmt
