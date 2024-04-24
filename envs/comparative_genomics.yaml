@@ -1,0 +1,8 @@
+name: gwfd
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - dansondergaard::run_tmhmm.py
+  - predector::signalp4

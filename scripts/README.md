@@ -1,0 +1,1 @@
+TODO completely flatten script structure

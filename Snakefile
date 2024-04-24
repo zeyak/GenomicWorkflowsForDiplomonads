@@ -1,31 +1,33 @@
-configfile: "env/config.yaml"
+configfile: "config.yaml"
 
 rule all:
     input:
-        #expand("output/tmhmm/{pfam}.txt", pfam=config['pfam']),
-        #expand("output/signalp/{pfam}.gff",pfam=config['pfam'])
-        expand("output/spiro/fastqc/{sample}.html", sample=config['sample']),
-        "output/spiro/multiqc/"
+        (
+            #expand("output/tmhmm/{pfam}.txt", pfam=config['pfam']),
+            #expand("output/signalp/{pfam}.gff",pfam=config['pfam'])
+            expand("output/spiro/fastqc/{sample}.html",sample=config['sample']),
+            "output/spiro/multiqc/"
+        )
 
 rule tmhmm:
     input:
-        protein ="output/interproscan/processed_data/{pfam}.faa"
+        protein="output/interproscan/processed_data/{pfam}.faa"
     output:
         "output/tmhmm/{pfam}.txt"
     conda:
-         "env/ComparativeGenomicsAnalysis.yaml"
+        "envs/comparative_genomics.yaml"
     script:
-        "scripts/3_ComparativeGenomicsAnalysis/3_ProteinDomainLevel/tmhmm.py"
+        "scripts/comparative_genomics/protein_domain_level/run_tmhmm.py"
 
 rule signalp:
     input:
-        protein= "output/interproscan/processed_data/{pfam}.faa"
+        protein="output/interproscan/processed_data/{pfam}.faa"
     output:
         "output/signalp/{pfam}.gff"
     conda:
-         "env/ComparativeGenomicsAnalysis.yaml"
+        "envs/comparative_genomics.yaml"
     script:
-        "scripts/3_ComparativeGenomicsAnalysis/3_ProteinDomainLevel/signalp.py"
+        "scripts/comparative_genomics/protein_domain_level/run_signalp.py"
 
 rule fastqc:
     input:
@@ -33,9 +35,9 @@ rule fastqc:
     output:
         "output/spiro/fastqc/{sample}.html"
     conda:
-         "env/HybridGenomeAssemblyWorkflow.yaml"
+        "envs/hybrid_genome_assembly.yaml"
     script:
-        "scripts/1_HybridGenomeAssemblyWorkflow/1_ReadsPreprocessing/ReadQualityCheck.py"
+        "scripts/hybrid_genome_assembly/read_preprocessing/check_read_quality.py"
 
 rule multiqc:
     input:
@@ -43,6 +45,76 @@ rule multiqc:
     output:
         directory("output/spiro/multiqc/")
     conda:
-         "env/HybridGenomeAssemblyWorkflow.yaml"
+        "envs/hybrid_genome_assembly.yaml"
     script:
-        "scripts/1_HybridGenomeAssemblyWorkflow/1_ReadsPreprocessing/MultiqcReport.py"
+        "scripts/hybrid_genome_assembly/read_preprocessing/get_multiqc.py"
+
+rule makeblastdb:
+    input:
+        "resources/{type}/db/{db}.fasta"
+    output:
+        multiext("output/{type}/db/{db}",
+            ".ndb",
+            ".nhr",
+            ".nin",
+            ".not",
+            ".nsq",
+            ".ntf",
+            ".nto")
+    params:
+        outname="output/{type}/db/{db}"
+    conda:
+        "envs/blast.yaml"
+    shell:
+        'makeblastdb -dbtype nucl -in {input} -out {params.outname}'
+
+rule blastn:
+    input:
+        query="resources/{type}/query/{query}.fasta",
+        db="output/{type}/db/{db}.ndb"
+    output:
+        'output/{type}/{db}/{query}.blastn'
+    params:
+        perc_identity=95,
+        outfmt=6,
+        num_threads=30,
+        max_target_seqs=1,
+        max_hsps=1,
+        db_prefix="output/{type}/db/{db}"
+    conda:
+        "envs/blast.yaml"
+    script:
+        "scripts/blastn.py"
+
+rule setup_nr_db:
+    output:
+        protected(directory("/data/zeynep/databases"))
+    conda:
+        "envs/blast.yaml"
+    script:
+        "scripts/setup_nr_db.py"
+
+rule blastdbcmd:
+    input:
+        "output/{type}/{db}/{prefix}"
+    output:
+        "output/{type}/{db}/{prefix}.blast.fasta"
+    params:
+        db_prefix="/data/zeynep/databases/nr"
+    conda:
+        "envs/blast.yaml"
+    shell:
+        "blastdbcmd -db {params.db_prefix} -entry_batch {input} > {output}"
+
+rule scatter_fasta:
+    input:
+        "output/{type}/{db}/{prefix}.blast.fasta"
+    output:
+        "output/{type}/{db}/{prefix}_{n}.blast.fasta"
+    params:
+        n_partitions=10,
+        n_partition="{n}"
+    conda:
+        "envs/blast.yaml"
+    script:
+        "scripts/scatter_fasta.py"
